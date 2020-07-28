@@ -74,8 +74,26 @@ document.addEventListener("turbolinks:load", () => {
     }
   };
 
+  const footer = document.getElementById("footer");
+  let footerHeight = footer.scrollHeight;
+  let newFooterHeight, footerHeightDiff;
+
   const changeLineCount = (newLineCount) => {
     // フォームの行数を変更
     messageContent.rows = lineCount = newLineCount;
+
+    // 新しいフッターの高さを取得し，違いを計算
+    newFooterHeight = footer.scrollHeight;
+    footerHeightDiff = newFooterHeight - footerHeight;
+    // 新しいフッターの高さをチャット欄の padding-bottom に反映し，スクロールさせる
+    // 行数が増える時と減る時で操作順を変更しないとうまくいかない
+    if (footerHeightDiff > 0) {
+      messageContainer.style.paddingBottom = newFooterHeight + "px";
+      window.scrollBy(0, footerHeightDiff);
+    } else {
+      window.scrollBy(0, footerHeightDiff);
+      messageContainer.style.paddingBottom = newFooterHeight + "px";
+    }
+    footerHeight = newFooterHeight;
   };
 });
